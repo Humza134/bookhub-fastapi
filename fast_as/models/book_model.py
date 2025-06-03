@@ -2,7 +2,8 @@ from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
 from typing import Optional, List
 import uuid
-from models.reviews_model import ReviewRead 
+from models.reviews_model import ReviewRead
+from models.book_tag_model import BookTag 
  
 
 class BookBase(SQLModel):
@@ -26,6 +27,11 @@ class Book(BookBase, table=True):
 
     # Relationship: One-to-Many (Book → Review)
     reviews: List["Review"] = Relationship(back_populates="book")
+
+    tags: List["Tag"] = Relationship(
+        link_model=BookTag,
+        back_populates="books"
+    )
 
 
 class BookCreate(BookBase):

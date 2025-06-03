@@ -9,6 +9,8 @@ from sqlmodel import SQLModel
 from models.book_model import Book
 from models.user_model import User
 from models.reviews_model import Review
+from models.tags_model import Tag
+from models.book_tag_model import BookTag
 from database.db_config import Config
 
 from alembic import context
