@@ -89,25 +89,30 @@ async def update_book(
     book_uid: str,
     book_data: BookUpdate,
     session: Annotated[AsyncSession, Depends(get_session)],
-    token_details: Annotated[dict, Depends(access_token_bearer)]
+    user_details: Annotated[User, Depends(get_current_user)]
 ):
     """
     Update a book by UID
     Args:
         book_uid (str): The UID of the book to update.
-        book_data (BookUpdate): The updated data for the book.
+        book_data (BookUpdate): The data to update the book with.
         session (AsyncSession): The database session.
+        user_details (User): The current user details.
     Returns:
         Book: The updated book object.
     """
-    book = await book_service.update_book_service(book_uid, book_data, session)
+    user_uid = user_details.uid
+    if not user_uid:
+        raise HTTPException(status_code=400, detail="Invalid user details: missing user UID")
+    
+    book = await book_service.update_book_service(book_uid, book_data, session, user_uid)
     return book
 
 @book_router.delete("/{book_uid}")
 async def delete_book(
     book_uid: str,
     session: Annotated[AsyncSession, Depends(get_session)],
-    token_details: Annotated[dict, Depends(access_token_bearer)]
+    user_details: Annotated[User, Depends(get_current_user)]
 )-> dict[str, str]:
     """
     Delete a book by UID
@@ -117,5 +122,9 @@ async def delete_book(
     Returns:
         dict[str, str]: A dictionary with a success message.
     """
-    await book_service.delete_book_service(book_uid, session)
+    user_uid = user_details.uid
+    if not user_uid:
+        raise HTTPException(status_code=400, detail="Invalid user details: missing user UID")
+    
+    await book_service.delete_book_service(book_uid, session, user_uid)
     return {"message": "Book deleted successfully"}
