@@ -22,6 +22,12 @@ class TagCreate(TagBase):
     """Input model for creating a new tag."""
     pass
 
+class TagRead(TagBase):
+    """Output model for reading a tag."""
+    uid: uuid.UUID
+    name: str
+
+
 class TagUpdate(SQLModel):
     """Input model for updating a tag."""
     name: Optional[str] = None

@@ -48,6 +48,7 @@ class UserRead(UserBase):
     uid: uuid.UUID
     is_verified: bool
     role: str
+
 class UserReadWithBooksAndReviews(UserBase):
     """Output model for reading user data."""
     uid: uuid.UUID

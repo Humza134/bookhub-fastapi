@@ -2,9 +2,9 @@ from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime
 from typing import Optional, List
 import uuid
-from models.reviews_model import ReviewRead
-from models.book_tag_model import BookTag 
- 
+from models.reviews_model import ReviewWithBook
+from models.book_tag_model import BookTag
+from models.tags_model import TagRead
 
 class BookBase(SQLModel):
     title: str
@@ -38,15 +38,20 @@ class BookCreate(BookBase):
     """Input model for creating a new book."""
     pass
 
-
 class BookRead(BookBase):
+    pass
+
+class BookReadWithReviwes(BookBase):
     """Output model for reading a book."""
     uid: uuid.UUID
     user_uid: uuid.UUID | None = None
     created_at: datetime
     updated_at: datetime
-    reviews: List[ReviewRead] = []  # type: ignore
-
+    reviews: List[ReviewWithBook] = []  # type: ignore
+    
+class BookReadWithReviwesAndTags(BookReadWithReviwes):
+    """Output model for reading a book."""
+    tags: List[TagRead]
 
 class BookUpdate(SQLModel):
     """Input model for updating a book."""

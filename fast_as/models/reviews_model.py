@@ -34,6 +34,9 @@ class ReviewRead(ReviewBase):
     created_at: datetime
     updated_at: datetime
 
+class ReviewWithBook(ReviewBase):
+    pass
+
 class ReviewUpdate(SQLModel):
     """Input model for updating a review."""
     content: Optional[str] = None
