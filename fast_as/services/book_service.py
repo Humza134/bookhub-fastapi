@@ -29,8 +29,8 @@ class BookService:
     
     async def get_all_books_by_user(self, session: AsyncSession, user_uid: str) -> List[Book]:
         try:
-            # statement = select(Book).where(Book.user_uid == user_uid)
-            statement = select(Book).where(Book.user_uid == user_uid).options(selectinload(Book.reviews))
+            statement = select(Book).where(Book.user_uid == user_uid)
+            # statement = select(Book).where(Book.user_uid == user_uid).options(selectinload(Book.reviews))
             result = await session.exec(statement)
             books = result.all()
             return list(books)
@@ -43,10 +43,37 @@ class BookService:
             )
         
     
+    # async def get_book_service(self, book_uid: str, session: AsyncSession) -> Book:
+    #     try:
+    #         # statement = select(Book).where(Book.uid == book_uid)
+    #         statement = select(Book).where(Book.uid == book_uid).options(selectinload(Book.reviews))
+    #         result = await session.exec(statement)
+    #         book = result.first()
+    #         if not book:
+    #             logger.warning(f"Book with UID {book_uid} not found.")
+    #             raise HTTPException(
+    #                 status_code=status.HTTP_404_NOT_FOUND,
+    #                 detail="Book not found"
+    #             )
+    #         return book
+    #     except Exception as e:
+    #         await session.rollback()
+    #         logger.error(f"Error getting book with UID {book_uid}: {str(e)}")
+    #         raise HTTPException(
+    #             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    #             detail=f"Error getting book: {str(e)}"
+    #         )
+
     async def get_book_service(self, book_uid: str, session: AsyncSession) -> Book:
         try:
-            # statement = select(Book).where(Book.uid == book_uid)
-            statement = select(Book).where(Book.uid == book_uid).options(selectinload(Book.reviews))
+            statement = (
+                select(Book)
+                .where(Book.uid == book_uid)
+                .options(
+                    selectinload(Book.reviews),
+                    selectinload(Book.tags)   # <-- tags bhi preload
+                )
+            )
             result = await session.exec(statement)
             book = result.first()
             if not book:
