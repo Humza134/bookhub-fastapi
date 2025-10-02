@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
-from models.book_model import Book, BookCreate, BookUpdate, BookRead
+from models.book_model import Book, BookCreate, BookUpdate, BookReadWithReviwes, BookRead, BookReadWithReviwesAndTags
 from models.user_model import User
 from services.book_service import BookService
 from database.connection import get_session
@@ -13,7 +13,7 @@ book_service = BookService()
 access_token_bearer = AccessTokenBearer()
 
 #get all books
-@book_router.get("/", response_model=list[BookRead], status_code=status.HTTP_200_OK)
+@book_router.get("/", response_model=list[BookReadWithReviwes], status_code=status.HTTP_200_OK)
 async def get_all_books(
     session: Annotated[AsyncSession, Depends(get_session)],
     token_details: Annotated[dict, Depends(access_token_bearer)],
@@ -45,7 +45,7 @@ async def get_user_book_submissions(
     return books
 
 #get book by uid
-@book_router.get("/{book_uid}", response_model=BookRead, status_code=status.HTTP_200_OK)
+@book_router.get("/{book_uid}", response_model=BookReadWithReviwesAndTags, status_code=status.HTTP_200_OK)
 async def get_book(
     book_uid: str, session: Annotated[AsyncSession, Depends(get_session)],
     token_details: Annotated[dict, Depends(access_token_bearer)]

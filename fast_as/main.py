@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from routes.book_route import book_router
 from routes.user_route import auth_router
 from routes.review_route import review_router
+from routes.tag_route import tag_router
 
 
 # @asynccontextmanager
@@ -16,6 +17,7 @@ app = FastAPI()
 app.include_router(book_router, prefix="/books", tags=["books"])
 app.include_router(auth_router, prefix="/auth", tags=["auth"])
 app.include_router(review_router, prefix="/reviews", tags=["reviews"])
+app.include_router(tag_router, prefix="/tags", tags=["tags"])
 
 @app.get("/")
 async def root():
