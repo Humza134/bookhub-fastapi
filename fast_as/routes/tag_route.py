@@ -3,7 +3,7 @@ from fastapi.exceptions import HTTPException
 from typing import Annotated
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from models.tags_model import Tag, TagCreate, TagRead, TagUpdate
-from models.book_model import BookReadWithReviwes, Book
+from models.book_model import BookReadWithReviews, Book
 from models.user_model import User
 from services.tag_service import TagService
 from database.connection import get_session
@@ -42,7 +42,7 @@ async def get_tag(
     tag = await tag_service.get_tag_service(tag_uid, session)
     return tag
 
-@tag_router.get("/{tag_uid}/books", response_model=list[BookReadWithReviwes], status_code=status.HTTP_200_OK)
+@tag_router.get("/{tag_uid}/books", response_model=list[BookReadWithReviews], status_code=status.HTTP_200_OK)
 async def get_books_by_tag(
     tag_uid: str,
     session: Annotated[AsyncSession, Depends(get_session)],

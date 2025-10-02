@@ -41,7 +41,7 @@ class BookCreate(BookBase):
 class BookRead(BookBase):
     pass
 
-class BookReadWithReviwes(BookBase):
+class BookReadWithReviews(BookBase):
     """Output model for reading a book."""
     uid: uuid.UUID
     user_uid: uuid.UUID | None = None
@@ -49,7 +49,7 @@ class BookReadWithReviwes(BookBase):
     updated_at: datetime
     reviews: List[ReviewWithBook] = []  # type: ignore
     
-class BookReadWithReviwesAndTags(BookReadWithReviwes):
+class BookReadWithReviewsAndTags(BookReadWithReviews):
     """Output model for reading a book."""
     tags: List[TagRead]
 
